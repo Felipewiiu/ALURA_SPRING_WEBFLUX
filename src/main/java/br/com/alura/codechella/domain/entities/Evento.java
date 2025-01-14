@@ -1,13 +1,18 @@
 package br.com.alura.codechella.domain.entities;
 
 import br.com.alura.codechella.domain.enums.TipoEvento;
-import jakarta.annotation.Generated;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDate;
 
 @Table("eventos")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class Evento {
 
     @Id

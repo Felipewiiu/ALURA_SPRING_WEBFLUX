@@ -26,4 +26,15 @@ public record EventoDto(
                 evento.getDescricao()
         );
     }
+
+    public Evento toEntity() {
+        Evento evento = new Evento();
+        evento.setId(this.id);
+        evento.setTipo(this.evento);
+        evento.setNome(this.nome);
+        evento.setData(this.data);
+        evento.setDescricao(this.descricao);
+
+        return evento;
+    }
 }

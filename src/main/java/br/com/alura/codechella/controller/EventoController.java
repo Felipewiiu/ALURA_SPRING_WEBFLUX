@@ -7,6 +7,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
+
+import java.time.Duration;
 
 @RestController
 @RequestMapping("/eventos")
@@ -14,6 +17,8 @@ import reactor.core.publisher.Mono;
 public class EventoController {
 
     private final EventoService eventoService;
+    private final Sinks.Many<EventoDto> eventosSink = Sinks.many().multicast().onBackpressureBuffer();
+
 
     @GetMapping//(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     //não vamos usar o list, pois o flux é não bloqueante
@@ -27,9 +32,15 @@ public class EventoController {
         return eventoService.obterPorId(id);
     }
 
+    @GetMapping(value = "/categoria/{tipo}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<EventoDto> obterPorTipo(@PathVariable String tipo){
+        return Flux.merge(eventoService.obterPorTipo(tipo), eventosSink.asFlux())
+                .delayElements(Duration.ofSeconds(4));
+    }
+
     @PostMapping
     public Mono<EventoDto> cadastrar(@RequestBody EventoDto eventoDto) {
-        return eventoService.cadastrar(eventoDto);
+        return eventoService.cadastrar(eventoDto).doOnSuccess(e -> eventosSink.tryEmitNext(eventoDto));
     }
 
     @DeleteMapping("/delete/{id}")

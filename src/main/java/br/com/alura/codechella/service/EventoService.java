@@ -1,6 +1,7 @@
 package br.com.alura.codechella.service;
 
 import br.com.alura.codechella.domain.entities.Evento;
+import br.com.alura.codechella.domain.enums.TipoEvento;
 import br.com.alura.codechella.dto.EventoDto;
 import br.com.alura.codechella.repository.EventoRepository;
 import io.micrometer.observation.ObservationFilter;
@@ -52,6 +53,13 @@ public class EventoService {
                     eventoExistente.setDescricao(dto.descricao());
                     return eventoRepository.save(eventoExistente);
                 })
+                .map(EventoDto::toDto);
+    }
+
+    public Flux<EventoDto> obterPorTipo(String tipo) {
+
+        TipoEvento tipoEvento = TipoEvento.valueOf(tipo.toUpperCase());
+        return eventoRepository.findByTipo(tipoEvento)
                 .map(EventoDto::toDto);
     }
 }

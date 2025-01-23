@@ -4,6 +4,7 @@ import br.com.alura.codechella.domain.entities.Evento;
 import br.com.alura.codechella.domain.enums.TipoEvento;
 import br.com.alura.codechella.dto.EventoDto;
 import br.com.alura.codechella.repository.EventoRepository;
+import br.com.alura.codechella.translate.TraducaoDeTextos;
 import io.micrometer.observation.ObservationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -61,5 +62,10 @@ public class EventoService {
         TipoEvento tipoEvento = TipoEvento.valueOf(tipo.toUpperCase());
         return eventoRepository.findByTipo(tipoEvento)
                 .map(EventoDto::toDto);
+    }
+
+    public Mono<String> obterTraducao(Long id, String idioma) {
+        return eventoRepository.findById(id)
+                .flatMap(e -> TraducaoDeTextos.obterTraducaoMyMemory(e.getDescricao(), idioma));
     }
 }

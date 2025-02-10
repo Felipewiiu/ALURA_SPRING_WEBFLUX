@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class CodechellaApplicationTests {
 
 	@Autowired
-	private WebTestClient webTestClient;
+	private WebTestClient webTestClient; // substitui o restTemplate
 
 	@Autowired
 	private TestRestTemplate restTemplate;

@@ -3,8 +3,10 @@ package br.com.alura.codechella;
 import br.com.alura.codechella.domain.enums.TipoEvento;
 import br.com.alura.codechella.dto.EventoDto;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.LocalDate;
@@ -17,6 +19,9 @@ class CodechellaApplicationTests {
 
 	@Autowired
 	private WebTestClient webTestClient;
+
+	@Autowired
+	private TestRestTemplate restTemplate;
 
 	@Test
 	void cadastraNovoEvento() {

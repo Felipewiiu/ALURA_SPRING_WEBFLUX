@@ -40,6 +40,24 @@ class CodechellaApplicationTests {
 				});
 	}
 
+	@Test
+	void buscarEvento() {
+		EventoDto dto = new EventoDto(13L, TipoEvento.SHOW, "The Weeknd",
+				LocalDate.parse("2025-11-02"), "Um show eletrizante ao ar livre com muitos efeitos especiais.");
+
+		webTestClient.get().uri("/eventos")
+				.exchange()
+				.expectStatus().is2xxSuccessful()
+				// desolve vários ítens
+				.expectBodyList(EventoDto.class).value(response -> {
+					EventoDto eventoDto = response.get(12);
+					assertEquals(dto.evento(), eventoDto.evento());
+					assertEquals(dto.nome(), eventoDto.nome());
+					assertEquals(dto.data(), eventoDto.data());
+
+				});
+	}
+
 
 
 }
